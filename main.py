@@ -54,6 +54,7 @@ def handle_message(event):
     if event.message.text == "配車依頼":
         VehicleDispatchStr1 = "配車を手配致します。"
         VehicleDispatchStr2 = "ご希望の車種を番号でご選択下さい。\n１：車イス対応\n２：ストレッチャー対応\n３：マイクロバス"
+        global VehicleDispatchFg
         VehicleDispatchFg = 1
         line_bot_api.reply_message(
             event.reply_token,
@@ -79,7 +80,7 @@ def handle_message(event):
         user_id = "ddd7478"
         profile = line_bot_api.get_profile(event.source.user_id)
 
-        messages = TextSendMessage(text=profile.display_name + "様から配車依頼がありました。\nマイクロバスを希望です。")
+        messages = TextSendMessage(text="様から配車依頼がありました。\nマイクロバスを希望です。")
         line_bot_api.push_message(user_id, messages=messages)
 
         line_bot_api.reply_message(
@@ -88,6 +89,7 @@ def handle_message(event):
         )
     elif event.message.text == "キャンセル" and VehicleDispatchFg == 1:
         text = "配車の手配をキャンセルしました。\nまたのご利用をお待ちしております。"
+        global VehicleDispatchFg
         VehicleDispatchFg =0
         line_bot_api.reply_message(
             event.reply_token,
