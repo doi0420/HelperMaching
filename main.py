@@ -17,7 +17,7 @@ from linebot.models import (
 
 import os
 
-VehicleDispatchFg=False
+VehicleDispatchFg=0
 
 YOUR_CHANNEL_ACCESS_TOKEN = os.environ["YOUR_CHANNEL_ACCESS_TOKEN"]
 YOUR_CHANNEL_SECRET       = os.environ["YOUR_CHANNEL_SECRET"]
@@ -54,6 +54,7 @@ def handle_message(event):
     if event.message.text == "配車依頼":
         VehicleDispatchStr1 = "配車を手配致します。"
         VehicleDispatchStr2 = "ご希望の車種を番号でご選択下さい。\n１：車イス対応\n２：ストレッチャー対応\n３：マイクロバス"
+        VehicleDispatchFg = 1
         line_bot_api.reply_message(
             event.reply_token,
             [
@@ -61,33 +62,32 @@ def handle_message(event):
                 TextSendMessage(text=VehicleDispatchStr2)
             ]
         )
-        VehicleDispatchFg = True
-    elif event.message.text == "1" and VehicleDispatchFg == True:
+    elif event.message.text == "1" and VehicleDispatchFg == 1:
         text = "平和交通株式会社へ依頼中です。\nしばらくお待ち下さい。"
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text=text)
         )
-    elif event.message.text == "2" and VehicleDispatchFg == True:
+    elif event.message.text == "2" and VehicleDispatchFg == 1:
         text = "フラワー交通　株式会社へ依頼中です。\nしばらくお待ち下さい。"
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text=text)
         )
-    elif event.message.text == "3" and VehicleDispatchFg == True:
+    elif event.message.text == "3":
         text = "三慶交通株式会社へ依頼中です。\nしばらくお待ち下さい。"
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text=text)
         )
-    elif event.message.text == "キャンセル" and VehicleDispatchFg == True:
+    elif event.message.text == "キャンセル" and VehicleDispatchFg == 1:
         text = "配車の手配をキャンセルしました。\nまたのご利用をお待ちしております。"
-        VehicleDispatchFg =False
+        VehicleDispatchFg =0
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text=text)
         )
-    elif event.message.text == "キャンセル" and VehicleDispatchFg == False:
+    elif event.message.text == "キャンセル" and VehicleDispatchFg == 0:
         text = "現在は何も受付おりません。"
         line_bot_api.reply_message(
             event.reply_token,
@@ -113,7 +113,7 @@ def handle_message(event):
         else:
             line_bot_api.reply_message(
                 event.reply_token,
-                TextSendMessage(text=event.message.text)
+                TextSendMessage(text=messages)
             )
 if __name__ == '__main__':
     # This is used when running locally only. When deploying to Google App
