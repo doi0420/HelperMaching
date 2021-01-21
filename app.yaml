@@ -1,0 +1,17 @@
+runtime: python37
+
+env_variables:
+  USER_ID: "U7bb673b5d4a90c19698ef689b421985e"
+  YOUR_CHANNEL_SECRET: "251bb464c1753b5cb1a6125a5195e0f5"
+  YOUR_CHANNEL_ACCESS_TOKEN: "nb/nSOJd/ShXkiJy1QhL1WtqjUaXIpDd97QhNG7LFvgG2BfQ9pvVWOoB1VFPamouMDQugZOc7NNhq3lG2VkaExwRKyqFvs3gsen0F9N797Y2JhI98WYw3vqKRUHIGFecclnJNJ0Fdm+eWGpF1BQ7vAdB04t89/1O/w1cDnyilFU="
+  STORAGE_BUCKET: ""  ## example https://storage.googleapis.com/{Bucket Name}
+
+handlers:
+# All URLs ending in .gif .png or .jpg are treated as paths to
+# static files in the static/ directory. The URL pattern is a
+# regular expression, with a grouping that is inserted into the
+# path to the file.
+- url: /(.*\.(gif|png|jpg))$
+  static_files: static/\1
+  upload: static/.*\.(gif|png|jpg)$
+  # ...
