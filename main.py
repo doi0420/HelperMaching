@@ -50,7 +50,7 @@ def callback():
 def handle_message(event):
     #　メッセージは "event.message.text" という変数に格納される
     if event.message.text == "配車依頼":
-        text = "以下の内容で配車の手配します。\n・車椅子対応\n内容に問題ない場合は「はい」\内容に変更がある場合は「いいえ」とコメントしてください。"
+        text = "以下の内容で配車の手配します。\n・車椅子対応\n内容に問題ない場合は「はい」\n内容に変更がある場合は「いいえ」\nとコメントしてください。"
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text=text)
