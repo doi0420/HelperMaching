@@ -1,7 +1,7 @@
 from flask import Flask, request
 import random, json, requests
 import pandas as pd
-
+import random
 
 
 # line libray
@@ -50,10 +50,14 @@ def callback():
 def handle_message(event):
     #　メッセージは "event.message.text" という変数に格納される
     if event.message.text == "配車依頼":
-        text = "以下の内容で配車の手配します。\n・車椅子対応\n内容に問題ない場合は「はい」\n内容に変更がある場合は「いいえ」\nとコメントしてください。"
+        VehicleDispatchStr1 = "配車を手配致します。"
+        VehicleDispatchStr2 = "ご希望の車種を番号でご選択下さい。\n１：車イス対応\n２：ストレッチャー対応\n３：マイクロバス"
         line_bot_api.reply_message(
             event.reply_token,
-            TextSendMessage(text=text)
+            [
+                TextSendMessage(text=VehicleDispatchStr1),
+                TextSendMessage(text=VehicleDispatchStr2)
+            ]
         )
     elif event.message.text == "はい":
         text = "配車の手配をしました。"
