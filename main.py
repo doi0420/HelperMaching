@@ -17,6 +17,8 @@ from linebot.models import (
 
 import os
 
+VehicleDispatchFg=False
+
 YOUR_CHANNEL_ACCESS_TOKEN = os.environ["YOUR_CHANNEL_ACCESS_TOKEN"]
 YOUR_CHANNEL_SECRET       = os.environ["YOUR_CHANNEL_SECRET"]
 STORAGE_BUCKET            = os.environ["STORAGE_BUCKET"]
@@ -59,37 +61,60 @@ def handle_message(event):
                 TextSendMessage(text=VehicleDispatchStr2)
             ]
         )
-    elif event.message.text == "はい":
-        text = "配車の手配をしました。"
+        VehicleDispatchFg = True
+    elif event.message.text == "1" and VehicleDispatchFg == True:
+        text = "平和交通株式会社へ依頼中です。\nしばらくお待ち下さい。"
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text=text)
         )
-    elif event.message.text == "いいえ":
-        text = "配車の手配をキャンセルしました。"
+    elif event.message.text == "2" and VehicleDispatchFg == True:
+        text = "フラワー交通　株式会社へ依頼中です。\nしばらくお待ち下さい。"
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text=text)
         )
-    elif event.message.text == "空き病院":
-        text = "・A病院\n・B病院\n・C病院\nが空いています。"
+    elif event.message.text == "3" and VehicleDispatchFg == True:
+        text = "三慶交通株式会社へ依頼中です。\nしばらくお待ち下さい。"
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text=text)
         )
-    elif event.message.text == "タクシー":
-        text = "利用可能なタクシー会社は\n・Dタクシー\n・Eタクシー\n・Fタクシー\nです。"
+    elif event.message.text == "キャンセル" and VehicleDispatchFg == True:
+        text = "配車の手配をキャンセルしました。\nまたのご利用をお待ちしております。"
+        VehicleDispatchFg =False
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text=text)
+        )
+    elif event.message.text == "キャンセル" and VehicleDispatchFg == False:
+        text = "現在は何も受付おりません。"
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text=text)
+        ) 
+    elif event.message.text == "タクシー会社":
+        TaxiListStr1 = "対応可能なタクシー会社です。"
+        TaxiListStr2 = "https://www.taxisite.com/station/info/9931003.aspx"
+        line_bot_api.reply_message(
+            event.reply_token,
+            [
+                TextSendMessage(text=TaxiListStr1),
+                TextSendMessage(text=TaxiListStr2)
+            ]
         )  
     else:
-        line_bot_api.reply_message(
-            event.reply_token,
-            TextSendMessage(text=event.message.text)
-        )
-
-
+        messages = random.choice(["？？？","ワタシタクシーノテハイシカデキマセン","スタンプ"])
+        if messages == "スタンプ":
+            line_bot_api.reply_message(
+                event.reply_token,
+                StickerSendMessage(package_id=1 ,sticker_id=1)
+            )
+        else:
+            line_bot_api.reply_message(
+                event.reply_token,
+                TextSendMessage(text=event.message.text)
+            )
 if __name__ == '__main__':
     # This is used when running locally only. When deploying to Google App
     # Engine, a webserver process such as Gunicorn will serve the app. This
