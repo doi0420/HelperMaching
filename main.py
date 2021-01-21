@@ -61,10 +61,12 @@ def callback():
 # メッセージ応答メソッド
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
+    global VehicleDispatchFg
     #　メッセージは "event.message.text" という変数に格納される
     if event.message.text == "配車依頼":
         VehicleDispatchStr1 = "配車を手配致します。"
         VehicleDispatchStr2 = "ご希望の車種を番号でご選択下さい。\n１：車イス対応\n２：ストレッチャー対応\n３：マイクロバス"
+        VehicleDispatchFg = 1
         line_bot_api.reply_message(
             event.reply_token,
             [
@@ -101,6 +103,7 @@ def handle_message(event):
             event.reply_token,
             TextSendMessage(text=text)
         )
+        VehicleDispatchFg = 0
     elif event.message.text == "キャンセル" and VehicleDispatchCheck() == False:
         text = "現在は何も受付おりません。"
         line_bot_api.reply_message(
