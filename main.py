@@ -76,6 +76,12 @@ def handle_message(event):
         )
     elif event.message.text == "3":
         text = "三慶交通株式会社へ依頼中です。\nしばらくお待ち下さい。"
+        user_id = "ddd7478"
+        profile = line_bot_api.get_profile(event.source.user_id)
+
+        messages = TextSendMessage(text=profile.display_name + "様から配車依頼がありました。\nマイクロバスを希望です。")
+        line_bot_api.push_message(user_id, messages=messages)
+
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text=text)
