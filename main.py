@@ -19,6 +19,17 @@ import os
 
 VehicleDispatchFg=0
 
+def VehicleDispatchFg_now():
+    global VehicleDispatchFg
+    return VehicleDispatchFg
+
+def VehicleDispatchCheck():
+    Fg = VehicleDispatchFg_now()
+    if Fg ==1:
+        return True
+    else:
+        return False
+
 YOUR_CHANNEL_ACCESS_TOKEN = os.environ["YOUR_CHANNEL_ACCESS_TOKEN"]
 YOUR_CHANNEL_SECRET       = os.environ["YOUR_CHANNEL_SECRET"]
 STORAGE_BUCKET            = os.environ["STORAGE_BUCKET"]
@@ -63,13 +74,13 @@ def handle_message(event):
                 TextSendMessage(text=VehicleDispatchStr2)
             ]
         )
-    elif event.message.text == "1" and VehicleDispatchFg == 1:
+    elif event.message.text == "1" and VehicleDispatchCheck():
         text = "平和交通株式会社へ依頼中です。\nしばらくお待ち下さい。"
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text=text)
         )
-    elif event.message.text == "2" and VehicleDispatchFg == 1:
+    elif event.message.text == "2" and VehicleDispatchCheck():
         text = "フラワー交通　株式会社へ依頼中です。\nしばらくお待ち下さい。"
         line_bot_api.reply_message(
             event.reply_token,
@@ -78,7 +89,6 @@ def handle_message(event):
     elif event.message.text == "3":
         text = "三慶交通株式会社へ依頼中です。\nしばらくお待ち下さい。"
         user_id = "ddd7478"
-        profile = line_bot_api.get_profile(event.source.user_id)
 
         messages = TextSendMessage(text="様から配車依頼がありました。\nマイクロバスを希望です。")
         line_bot_api.push_message(user_id, messages=messages)
@@ -87,7 +97,7 @@ def handle_message(event):
             event.reply_token,
             TextSendMessage(text=text)
         )
-    elif event.message.text == "キャンセル" and VehicleDispatchFg == 1:
+    elif event.message.text == "キャンセル" and VehicleDispatchCheck():
         text = "配車の手配をキャンセルしました。\nまたのご利用をお待ちしております。"
         global VehicleDispatchFg
         VehicleDispatchFg =0
@@ -95,7 +105,7 @@ def handle_message(event):
             event.reply_token,
             TextSendMessage(text=text)
         )
-    elif event.message.text == "キャンセル" and VehicleDispatchFg == 0:
+    elif event.message.text == "キャンセル" and VehicleDispatchCheck() == False:
         text = "現在は何も受付おりません。"
         line_bot_api.reply_message(
             event.reply_token,
