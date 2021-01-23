@@ -90,7 +90,7 @@ def handle_message(event):
         text = "三慶交通株式会社へ依頼中です。\nしばらくお待ち下さい。"
         user_id = "U7bb673b5d4a90c19698ef689b421985e"
 
-        messages = TextSendMessage(text=str(event.source.displayName) + "様から配車依頼がありました。\nマイクロバスを希望です。")
+        messages = TextSendMessage(text="様から配車依頼がありました。\nマイクロバスを希望です。")
         line_bot_api.push_message(user_id, messages=messages)
 
         line_bot_api.reply_message(
