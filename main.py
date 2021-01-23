@@ -74,30 +74,34 @@ def handle_message(event):
                 TextSendMessage(text=VehicleDispatchStr2)
             ]
         )
-    elif event.message.text == "1" and VehicleDispatchCheck():
-        text = "平和交通株式会社へ依頼中です。\nしばらくお待ち下さい。"
-        line_bot_api.reply_message(
-            event.reply_token,
-            TextSendMessage(text=text)
-        )
-    elif event.message.text == "2" and VehicleDispatchCheck():
-        text = "フラワー交通　株式会社へ依頼中です。\nしばらくお待ち下さい。"
-        line_bot_api.reply_message(
-            event.reply_token,
-            TextSendMessage(text=text)
-        )
-    elif event.message.text == "3":
+    elif VehicleDispatchCheck():
         profile = line_bot_api.get_profile(event.source.user_id)
-        text = "三慶交通株式会社へ依頼中です。\nしばらくお待ち下さい。"
         user_id = "U7bb673b5d4a90c19698ef689b421985e"
-
-        messages = TextSendMessage(text=profile.display_name + "様から配車依頼がありました。\nマイクロバスを希望です。")
-        line_bot_api.push_message(user_id, messages=messages)
-
-        line_bot_api.reply_message(
-            event.reply_token,
-            TextSendMessage(text=event.source.user_id)
-        )
+    
+        if event.message.text == "1":
+            messages = TextSendMessage(text=profile.display_name + "様から配車依頼がありました。\n車イス対応車を希望です。")
+            line_bot_api.push_message(user_id, messages=messages)
+            text = "アイネット交通株式会社へ依頼中です。\nしばらくお待ち下さい。"
+            line_bot_api.reply_message(
+                event.reply_token,
+                TextSendMessage(text=text)
+            )
+        elif event.message.text == "2":
+            messages = TextSendMessage(text=profile.display_name + "様から配車依頼がありました。\nストレッチャー対応車を希望です。")
+            line_bot_api.push_message(user_id, messages=messages)
+            text = "INET交通　株式会社へ依頼中です。\nしばらくお待ち下さい。"
+            line_bot_api.reply_message(
+                event.reply_token,
+                TextSendMessage(text=text)
+            )
+        elif event.message.text == "3":
+            messages = TextSendMessage(text=profile.display_name + "様から配車依頼がありました。\nマイクロバスを希望です。")
+            line_bot_api.push_message(user_id, messages=messages)
+            text = "あいねっと交通株式会社へ依頼中です。\nしばらくお待ち下さい。"
+            line_bot_api.reply_message(
+                event.reply_token,
+                TextSendMessage(text=text)
+            )
     elif event.message.text == "キャンセル" and VehicleDispatchCheck():
         text = "配車の手配をキャンセルしました。\nまたのご利用をお待ちしております。"
         line_bot_api.reply_message(
