@@ -88,14 +88,14 @@ def handle_message(event):
         )
     elif event.message.text == "3":
         text = "三慶交通株式会社へ依頼中です。\nしばらくお待ち下さい。"
-        user_id = "ddd7478"
+        #user_id = "ddd7478"
 
-        messages = TextSendMessage(text="様から配車依頼がありました。\nマイクロバスを希望です。")
-        line_bot_api.push_message(user_id, messages=messages)
+        #messages = TextSendMessage(text="様から配車依頼がありました。\nマイクロバスを希望です。")
+        #line_bot_api.push_message(user_id, messages=messages)
 
         line_bot_api.reply_message(
             event.reply_token,
-            TextSendMessage(text=text)
+            TextSendMessage(text=event.source.user_id)
         )
     elif event.message.text == "キャンセル" and VehicleDispatchCheck():
         text = "配車の手配をキャンセルしました。\nまたのご利用をお待ちしております。"
