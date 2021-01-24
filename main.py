@@ -1,3 +1,4 @@
+
 from flask import Flask, request
 import random, json, requests
 import pandas as pd
@@ -76,10 +77,43 @@ def callback():
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     USER_ID = "U7bb673b5d4a90c19698ef689b421985e"
+    KAIGO_USER_ID = "U7bb673b5d4a90c19698ef689b421985e"
     global VehicleDispatchFg
     global VehicleDispatchKind
     #　メッセージは "event.message.text" という変数に格納される
-    if event.message.text == "配車依頼":
+    if event.source.user_id == USER_ID and event.message.text ==1:
+        wkStr1 = ""
+        wkStr2 = ""
+        if VehicleDispatchKind == 1:
+            wkStr1 = "おまたせ致しました。\nアイネット交通株式会社からの配車が確定しました。"
+            wkStr2 = "到着地：東京都大田区蒲田5-37-1\n車種：車イス対応タクシー"
+            messages = TextSendMessage(text=wkStr1)
+            line_bot_api.push_message(KAIGO_USER_ID, messages=messages)
+            messages = TextSendMessage(text=wkStr2)
+            line_bot_api.push_message(KAIGO_USER_ID, messages=messages)
+        elif VehicleDispatchKind == 2:
+            wkStr1 = "おまたせ致しました。\nINET交通　株式会社からの配車が確定しました。"
+            wkStr2 = "到着地：東京都大田区蒲田5-37-1\n車種：ストレッチャー対応タクシー"
+            messages = TextSendMessage(text=wkStr1)
+            line_bot_api.push_message(KAIGO_USER_ID, messages=messages)
+            messages = TextSendMessage(text=wkStr2)
+            line_bot_api.push_message(KAIGO_USER_ID, messages=messages)
+        elif VehicleDispatchKind == ３:
+            wkStr1 = "おまたせ致しました。\nあいねっと交通株式会社からの配車が確定しました。"
+            wkStr2 = "到着地：東京都大田区蒲田5-37-1\n車種：マイクロバス"
+            messages = TextSendMessage(text=wkStr1)
+            line_bot_api.push_message(KAIGO_USER_ID, messages=messages)
+            messages = TextSendMessage(text=wkStr2)
+            line_bot_api.push_message(KAIGO_USER_ID, messages=messages)
+        VehicleDispatchKind=0
+        VehicleDispatchFg=0
+        
+    elif event.source.user_id == USER_ID and event.message.text ==2:
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text="申し訳ございません。現在対応可能なタクシーはございません。\nしばらくして再度申し込み下さい。")
+        )       
+    elif event.message.text == "配車依頼" and VehicleDispatchCheck()==False:
         VehicleDispatchStr1 = "配車を手配致します。"
         VehicleDispatchStr2 = "ご希望の車種を番号でご選択下さい。\n１：車イス対応\n２：ストレッチャー対応\n３：マイクロバス"
         VehicleDispatchFg = 1
@@ -97,6 +131,9 @@ def handle_message(event):
             VehicleDispatchKind = 1
             messages = TextSendMessage(text=profile.display_name + "様から配車依頼がありました。\n車イス対応車を希望です。")
             line_bot_api.push_message(USER_ID, messages=messages)
+            messages = TextSendMessage(text="対応可否を番号でご選択下さい。\n１：対応可能\n２：対応不可")
+            line_bot_api.push_message(USER_ID, messages=messages)
+
             text = "アイネット交通株式会社へ依頼中です。\nしばらくお待ち下さい。"
             line_bot_api.reply_message(
                 event.reply_token,
@@ -106,6 +143,8 @@ def handle_message(event):
             VehicleDispatchKind = 2
             messages = TextSendMessage(text=profile.display_name + "様から配車依頼がありました。\nストレッチャー対応車を希望です。")
             line_bot_api.push_message(USER_ID, messages=messages)
+            messages = TextSendMessage(text="対応可否を番号でご選択下さい。\n１：対応可能\n２：対応不可")
+            line_bot_api.push_message(USER_ID, messages=messages)            
             text = "INET交通　株式会社へ依頼中です。\nしばらくお待ち下さい。"
             line_bot_api.reply_message(
                 event.reply_token,
@@ -115,6 +154,8 @@ def handle_message(event):
             VehicleDispatchKind = 3
             messages = TextSendMessage(text=profile.display_name + "様から配車依頼がありました。\nマイクロバスを希望です。")
             line_bot_api.push_message(USER_ID, messages=messages)
+            messages = TextSendMessage(text="対応可否を番号でご選択下さい。\n１：対応可能\n２：対応不可")
+            line_bot_api.push_message(USER_ID, messages=messages)    
             text = "あいねっと交通株式会社へ依頼中です。\nしばらくお待ち下さい。"
             line_bot_api.reply_message(
                 event.reply_token,
@@ -169,3 +210,4 @@ if __name__ == '__main__':
         port=int(os.environ.get('PORT', 8080))
     )
 # [END gae_python37_app]
+
