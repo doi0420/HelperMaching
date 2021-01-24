@@ -105,6 +105,7 @@ def handle_message(event):
             line_bot_api.push_message(KAIGO_USER_ID, messages=messages)
             messages = TextSendMessage(text=wkStr2)
             line_bot_api.push_message(KAIGO_USER_ID, messages=messages)
+        
         VehicleDispatchKind=0
         VehicleDispatchFg=0
         
@@ -112,7 +113,9 @@ def handle_message(event):
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text="申し訳ございません。現在対応可能なタクシーはございません。\nしばらくして再度申し込み下さい。")
-        )       
+        )
+        VehicleDispatchKind=0
+        VehicleDispatchFg=0  
     elif event.message.text == "配車依頼" and VehicleDispatchCheck()==False:
         VehicleDispatchStr1 = "配車を手配致します。"
         VehicleDispatchStr2 = "ご希望の車種を番号でご選択下さい。\n１：車イス対応\n２：ストレッチャー対応\n３：マイクロバス"
