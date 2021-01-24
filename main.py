@@ -18,6 +18,7 @@ from linebot.models import (
 import os
 
 VehicleDispatchFg=0
+VehicleDispatchKind=0
 
 def VehicleDispatchFg_now():
     global VehicleDispatchFg
@@ -29,6 +30,19 @@ def VehicleDispatchCheck():
         return True
     else:
         return False
+
+def SetElseStr():
+    wkStr = ""
+    if VehicleDispatchFg == 0:
+        wkStr = "現在は配車のオプション選択待ちです。\n１：車イス対応\n２：ストレッチャー対応\n３：マイクロバス\nからオプションをコメントして下さい。"
+    elif VehicleDispatchFg == 1:
+        wkStr = "現在はアイネット交通株式会社へ配車依頼中です。\nもうしばらくお待ち下さい。"
+    elif VehicleDispatchFg == 2:
+        wkStr = "現在はINET交通　株式会社へ配車依頼中です。\nもうしばらくお待ち下さい。"
+    elif VehicleDispatchFg == 3:
+        wkStr = "現在はあいねっと交通株式会社へ配車依頼中です。\nもうしばらくお待ち下さい。"
+    
+    return wkStr
 
 YOUR_CHANNEL_ACCESS_TOKEN = os.environ["YOUR_CHANNEL_ACCESS_TOKEN"]
 YOUR_CHANNEL_SECRET       = os.environ["YOUR_CHANNEL_SECRET"]
@@ -62,6 +76,7 @@ def callback():
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     global VehicleDispatchFg
+    global VehicleDispatchKind
     #　メッセージは "event.message.text" という変数に格納される
     if event.message.text == "配車依頼":
         VehicleDispatchStr1 = "配車を手配致します。"
@@ -79,6 +94,7 @@ def handle_message(event):
         user_id = "U7bb673b5d4a90c19698ef689b421985e"
     
         if event.message.text == "1":
+            VehicleDispatchKind = 1
             messages = TextSendMessage(text=profile.display_name + "様から配車依頼がありました。\n車イス対応車を希望です。")
             line_bot_api.push_message(user_id, messages=messages)
             text = "アイネット交通株式会社へ依頼中です。\nしばらくお待ち下さい。"
@@ -87,6 +103,7 @@ def handle_message(event):
                 TextSendMessage(text=text)
             )
         elif event.message.text == "2":
+            VehicleDispatchKind = 2
             messages = TextSendMessage(text=profile.display_name + "様から配車依頼がありました。\nストレッチャー対応車を希望です。")
             line_bot_api.push_message(user_id, messages=messages)
             text = "INET交通　株式会社へ依頼中です。\nしばらくお待ち下さい。"
@@ -95,6 +112,7 @@ def handle_message(event):
                 TextSendMessage(text=text)
             )
         elif event.message.text == "3":
+            VehicleDispatchKind = 3
             messages = TextSendMessage(text=profile.display_name + "様から配車依頼がありました。\nマイクロバスを希望です。")
             line_bot_api.push_message(user_id, messages=messages)
             text = "あいねっと交通株式会社へ依頼中です。\nしばらくお待ち下さい。"
@@ -102,19 +120,28 @@ def handle_message(event):
                 event.reply_token,
                 TextSendMessage(text=text)
             )
-    elif event.message.text == "キャンセル" and VehicleDispatchCheck():
-        text = "配車の手配をキャンセルしました。\nまたのご利用をお待ちしております。"
-        line_bot_api.reply_message(
-            event.reply_token,
-            TextSendMessage(text=text)
-        )
-        VehicleDispatchFg = 0
-    elif event.message.text == "キャンセル" and VehicleDispatchCheck() == False:
-        text = "現在は何も受付おりません。"
-        line_bot_api.reply_message(
-            event.reply_token,
-            TextSendMessage(text=text)
-        ) 
+        elif event.message.text == "タクシー会社":
+            TaxiListStr1 = "対応可能なタクシー会社です。"
+            TaxiListStr2 = "https://www.taxisite.com/station/info/9931003.aspx"
+            line_bot_api.reply_message(
+                event.reply_token,
+                [
+                    TextSendMessage(text=TaxiListStr1),
+                    TextSendMessage(text=TaxiListStr2)
+                ]
+            )
+        elif event.message.text == "キャンセル":
+            text = "配車の手配をキャンセルしました。\nまたのご利用をお待ちしております。"
+            line_bot_api.reply_message(
+                event.reply_token,
+                TextSendMessage(text=text)
+            )
+            VehicleDispatchFg = 0
+        else:
+            line_bot_api.reply_message(
+                event.reply_token,
+                TextSendMessage(text=SetElseStr)
+            )        
     elif event.message.text == "タクシー会社":
         TaxiListStr1 = "対応可能なタクシー会社です。"
         TaxiListStr2 = "https://www.taxisite.com/station/info/9931003.aspx"
@@ -126,16 +153,9 @@ def handle_message(event):
             ]
         )  
     else:
-        messages = random.choice(["？？？","ワタシタクシーノテハイシカデキマセン","スタンプ"])
-        if messages == "スタンプ":
-            line_bot_api.reply_message(
-                event.reply_token,
-                StickerSendMessage(package_id=1 ,sticker_id=1)
-            )
-        else:
-            line_bot_api.reply_message(
-                event.reply_token,
-                TextSendMessage(text=messages)
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text="現在は何も受付おりません。")
             )
 if __name__ == '__main__':
     # This is used when running locally only. When deploying to Google App
