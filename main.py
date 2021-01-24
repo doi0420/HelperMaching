@@ -96,7 +96,7 @@ def handle_message(event):
         VehicleDispatchStr1 = "配車を手配致します。"
         VehicleDispatchStr2 = "ご希望の車種を番号でご選択下さい。\n１：車イス対応\n２：ストレッチャー対応\n３：マイクロバス"
         VehicleDispatchFg = 1
-        ws.update_cell(1,1,event.source.user_id)
+        #ws.update_cell(1,1,event.source.user_id)
         line_bot_api.reply_message(
             event.reply_token,
             [
