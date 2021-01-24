@@ -86,8 +86,8 @@ def handle_message(event):
     USER_ID = "U7bb673b5d4a90c19698ef689b421985e"
     global VehicleDispatchFg
     global VehicleDispatchKind
-    path = os.path.dirname(os.path.abspath(__file__)) + "/"
-    jsonf = path + "helpermaching-9f5798e53f3c.json"
+    #path = os.path.dirname(os.path.abspath(__file__)) + "/"
+    jsonf = "helpermaching-9f5798e53f3c.json"
     # spread_sheet_key = "1mFmBA6wC_YFOy_47nrJboLFfgKnBmUhPL6-XAXOUYNM"
     # ws = connect_gspread(jsonf,spread_sheet_key)
 
