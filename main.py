@@ -3,6 +3,7 @@ import random, json, requests
 import pandas as pd
 import gspread
 import json
+import os
 
 from oauth2client.service_account import ServiceAccountCredentials
 # line libray
@@ -15,8 +16,6 @@ from linebot.exceptions import (
 from linebot.models import (
     MessageEvent, TextMessage, TextSendMessage, StickerSendMessage,ImageSendMessage
 )
-
-import os
 
 VehicleDispatchFg=0
 VehicleDispatchKind=0
@@ -87,8 +86,8 @@ def handle_message(event):
     USER_ID = "U7bb673b5d4a90c19698ef689b421985e"
     global VehicleDispatchFg
     global VehicleDispatchKind
-
-    jsonf = os.path.dirname(os.path.abspath(__file__)) + "/helpermaching-9f5798e53f3c.json"
+    path = os.path.dirname(os.path.abspath(__file__)) + "/"
+    jsonf = path + "helpermaching-9f5798e53f3c.json"
     spread_sheet_key = "1mFmBA6wC_YFOy_47nrJboLFfgKnBmUhPL6-XAXOUYNM"
     ws = connect_gspread(jsonf,spread_sheet_key)
 
