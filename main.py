@@ -44,13 +44,13 @@ def SetElseStr():
     
     return wkStr
 
-def connect_gspread(jsonf,key):
-    scope = ['https://spreadsheets.google.com/feeds','https://www.googleapis.com/auth/drive']
-    credentials = ServiceAccountCredentials.from_json_keyfile_name(jsonf, scope)
-    gc = gspread.authorize(credentials)
-    SPREADSHEET_KEY = key
-    worksheet = gc.open_by_key(SPREADSHEET_KEY).sheet1
-    return worksheet
+# def connect_gspread(jsonf,key):
+#     scope = ['https://spreadsheets.google.com/feeds','https://www.googleapis.com/auth/drive']
+#     credentials = ServiceAccountCredentials.from_json_keyfile_name(jsonf, scope)
+#     gc = gspread.authorize(credentials)
+#     SPREADSHEET_KEY = key
+#     worksheet = gc.open_by_key(SPREADSHEET_KEY).sheet1
+#     return worksheet
 
 YOUR_CHANNEL_ACCESS_TOKEN = os.environ["YOUR_CHANNEL_ACCESS_TOKEN"]
 YOUR_CHANNEL_SECRET       = os.environ["YOUR_CHANNEL_SECRET"]
@@ -88,8 +88,8 @@ def handle_message(event):
     global VehicleDispatchKind
     path = os.path.dirname(os.path.abspath(__file__)) + "/"
     jsonf = path + "helpermaching-9f5798e53f3c.json"
-    spread_sheet_key = "1mFmBA6wC_YFOy_47nrJboLFfgKnBmUhPL6-XAXOUYNM"
-    ws = connect_gspread(jsonf,spread_sheet_key)
+    # spread_sheet_key = "1mFmBA6wC_YFOy_47nrJboLFfgKnBmUhPL6-XAXOUYNM"
+    # ws = connect_gspread(jsonf,spread_sheet_key)
 
     #　メッセージは "event.message.text" という変数に格納される
     if event.message.text == "配車依頼":
@@ -148,7 +148,7 @@ def handle_message(event):
             text = "配車の手配をキャンセルしました。\nまたのご利用をお待ちしております。"
             line_bot_api.reply_message(
                 event.reply_token,
-                TextSendMessage(text=text)
+                TextSendMessage(text=jsonf)
             )
             VehicleDispatchFg = 0
             VehicleDispatchKind = 0
