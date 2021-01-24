@@ -88,7 +88,7 @@ def handle_message(event):
     global VehicleDispatchFg
     global VehicleDispatchKind
 
-    jsonf = "helpermaching-9f5798e53f3c.json"
+    jsonf = os.path.dirname(os.path.abspath(__file__)) + "/helpermaching-9f5798e53f3c.json"
     spread_sheet_key = "1mFmBA6wC_YFOy_47nrJboLFfgKnBmUhPL6-XAXOUYNM"
     ws = connect_gspread(jsonf,spread_sheet_key)
 
