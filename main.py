@@ -75,6 +75,7 @@ def callback():
 # メッセージ応答メソッド
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
+    USER_ID = "U7bb673b5d4a90c19698ef689b421985e"
     global VehicleDispatchFg
     global VehicleDispatchKind
     #　メッセージは "event.message.text" という変数に格納される
@@ -91,12 +92,11 @@ def handle_message(event):
         )
     elif VehicleDispatchCheck():
         profile = line_bot_api.get_profile(event.source.user_id)
-        user_id = "U7bb673b5d4a90c19698ef689b421985e"
     
         if event.message.text == "1":
             VehicleDispatchKind = 1
             messages = TextSendMessage(text=profile.display_name + "様から配車依頼がありました。\n車イス対応車を希望です。")
-            line_bot_api.push_message(user_id, messages=messages)
+            line_bot_api.push_message(USER_ID, messages=messages)
             text = "アイネット交通株式会社へ依頼中です。\nしばらくお待ち下さい。"
             line_bot_api.reply_message(
                 event.reply_token,
@@ -105,7 +105,7 @@ def handle_message(event):
         elif event.message.text == "2":
             VehicleDispatchKind = 2
             messages = TextSendMessage(text=profile.display_name + "様から配車依頼がありました。\nストレッチャー対応車を希望です。")
-            line_bot_api.push_message(user_id, messages=messages)
+            line_bot_api.push_message(USER_ID, messages=messages)
             text = "INET交通　株式会社へ依頼中です。\nしばらくお待ち下さい。"
             line_bot_api.reply_message(
                 event.reply_token,
@@ -114,7 +114,7 @@ def handle_message(event):
         elif event.message.text == "3":
             VehicleDispatchKind = 3
             messages = TextSendMessage(text=profile.display_name + "様から配車依頼がありました。\nマイクロバスを希望です。")
-            line_bot_api.push_message(user_id, messages=messages)
+            line_bot_api.push_message(USER_ID, messages=messages)
             text = "あいねっと交通株式会社へ依頼中です。\nしばらくお待ち下さい。"
             line_bot_api.reply_message(
                 event.reply_token,
@@ -137,6 +137,7 @@ def handle_message(event):
                 TextSendMessage(text=text)
             )
             VehicleDispatchFg = 0
+            VehicleDispatchKind = 0
         else:
             line_bot_api.reply_message(
                 event.reply_token,
