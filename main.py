@@ -76,8 +76,8 @@ def callback():
 # メッセージ応答メソッド
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-    USER_ID = "U96671e7042e3f7fc2efee15b6c7f840f"
-    KAIGO_USER_ID = "U7bb673b5d4a90c19698ef689b421985e"
+    USER_ID = "U7bb673b5d4a90c19698ef689b421985e"
+    KAIGO_USER_ID = "U96671e7042e3f7fc2efee15b6c7f840f"
     global VehicleDispatchFg
     global VehicleDispatchKind
     #　メッセージは "event.message.text" という変数に格納される
