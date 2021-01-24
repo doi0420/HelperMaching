@@ -33,13 +33,13 @@ def VehicleDispatchCheck():
 
 def SetElseStr():
     wkStr = ""
-    if VehicleDispatchFg == 0:
+    if VehicleDispatchKind == 0:
         wkStr = "現在は配車のオプション選択待ちです。\n１：車イス対応\n２：ストレッチャー対応\n３：マイクロバス\nからオプションをコメントして下さい。"
-    elif VehicleDispatchFg == 1:
+    elif VehicleDispatchKind == 1:
         wkStr = "現在はアイネット交通株式会社へ配車依頼中です。\nもうしばらくお待ち下さい。"
-    elif VehicleDispatchFg == 2:
+    elif VehicleDispatchKind == 2:
         wkStr = "現在はINET交通　株式会社へ配車依頼中です。\nもうしばらくお待ち下さい。"
-    elif VehicleDispatchFg == 3:
+    elif VehicleDispatchKind == 3:
         wkStr = "現在はあいねっと交通株式会社へ配車依頼中です。\nもうしばらくお待ち下さい。"
     
     return wkStr
