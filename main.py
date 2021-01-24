@@ -1,10 +1,9 @@
 from flask import Flask, request
 import random, json, requests
 import pandas as pd
-import gspread
-import json
+import random
 
-from oauth2client.service_account import ServiceAccountCredentials
+
 # line libray
 from linebot import (
     LineBotApi, WebhookHandler
@@ -45,14 +44,6 @@ def SetElseStr():
     
     return wkStr
 
-def connect_gspread(jsonf,key):
-    scope = ['https://spreadsheets.google.com/feeds','https://www.googleapis.com/auth/drive']
-    credentials = ServiceAccountCredentials.from_json_keyfile_name(jsonf, scope)
-    gc = gspread.authorize(credentials)
-    SPREADSHEET_KEY = key
-    worksheet = gc.open_by_key(SPREADSHEET_KEY).sheet1
-    return worksheet
-
 YOUR_CHANNEL_ACCESS_TOKEN = os.environ["YOUR_CHANNEL_ACCESS_TOKEN"]
 YOUR_CHANNEL_SECRET       = os.environ["YOUR_CHANNEL_SECRET"]
 STORAGE_BUCKET            = os.environ["STORAGE_BUCKET"]
@@ -87,17 +78,11 @@ def handle_message(event):
     USER_ID = "U7bb673b5d4a90c19698ef689b421985e"
     global VehicleDispatchFg
     global VehicleDispatchKind
-
-    jsonf = "helpermaching-9f5798e53f3c.json"
-    spread_sheet_key = "1mFmBA6wC_YFOy_47nrJboLFfgKnBmUhPL6-XAXOUYNM"
-    ws = connect_gspread(jsonf,spread_sheet_key)
-
     #　メッセージは "event.message.text" という変数に格納される
     if event.message.text == "配車依頼":
         VehicleDispatchStr1 = "配車を手配致します。"
         VehicleDispatchStr2 = "ご希望の車種を番号でご選択下さい。\n１：車イス対応\n２：ストレッチャー対応\n３：マイクロバス"
         VehicleDispatchFg = 1
-        ws.update_cell(1,1,event.source.user_id)
         line_bot_api.reply_message(
             event.reply_token,
             [
@@ -157,8 +142,7 @@ def handle_message(event):
             line_bot_api.reply_message(
                 event.reply_token,
                 TextSendMessage(text=SetElseStr())
-            )
-
+            )        
     elif event.message.text == "タクシー会社":
         TaxiListStr1 = "対応可能なタクシー会社です。"
         TaxiListStr2 = "https://www.taxisite.com/station/info/9931003.aspx"
