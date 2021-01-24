@@ -81,7 +81,7 @@ def handle_message(event):
     global VehicleDispatchFg
     global VehicleDispatchKind
     #　メッセージは "event.message.text" という変数に格納される
-    if event.source.user_id == USER_ID and event.message.text ==1:
+    if event.source.user_id == USER_ID and event.message.text =="1":
         wkStr1 = ""
         wkStr2 = ""
         if VehicleDispatchKind == 1:
@@ -108,7 +108,7 @@ def handle_message(event):
         VehicleDispatchKind=0
         VehicleDispatchFg=0
         
-    elif event.source.user_id == USER_ID and event.message.text ==2:
+    elif event.source.user_id == USER_ID and event.message.text =="2":
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text="申し訳ございません。現在対応可能なタクシーはございません。\nしばらくして再度申し込み下さい。")
