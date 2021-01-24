@@ -98,7 +98,7 @@ def handle_message(event):
             line_bot_api.push_message(KAIGO_USER_ID, messages=messages)
             messages = TextSendMessage(text=wkStr2)
             line_bot_api.push_message(KAIGO_USER_ID, messages=messages)
-        elif VehicleDispatchKind == ３:
+        elif VehicleDispatchKind == 3:
             wkStr1 = "おまたせ致しました。\nあいねっと交通株式会社からの配車が確定しました。"
             wkStr2 = "到着地：東京都大田区蒲田5-37-1\n車種：マイクロバス"
             messages = TextSendMessage(text=wkStr1)
