@@ -196,7 +196,12 @@ def handle_message(event):
                 TextSendMessage(text=TaxiListStr1),
                 TextSendMessage(text=TaxiListStr2)
             ]
-        )  
+        )
+    elif event.message.text == "あ":
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text=event.source.user_id)
+            )
     else:
         line_bot_api.reply_message(
             event.reply_token,
