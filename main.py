@@ -77,7 +77,7 @@ def callback():
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     USER_ID = "U7bb673b5d4a90c19698ef689b421985e"
-    KAIGO_USER_ID = "U96671e7042e3f7fc2efee15b6c7f840f"
+    #KAIGO_USER_ID = "U96671e7042e3f7fc2efee15b6c7f840f"
     global VehicleDispatchFg
     global VehicleDispatchKind
     #　メッセージは "event.message.text" という変数に格納される
@@ -88,23 +88,23 @@ def handle_message(event):
             wkStr1 = "おまたせ致しました。\nアイネット交通株式会社からの配車が確定しました。"
             wkStr2 = "到着地：東京都大田区蒲田5-37-1\n車種：車イス対応タクシー"
             messages = TextSendMessage(text=wkStr1)
-            line_bot_api.push_message(KAIGO_USER_ID, messages=messages)
+            line_bot_api.push_message("U96671e7042e3f7fc2efee15b6c7f840f", messages=messages)
             messages = TextSendMessage(text=wkStr2)
-            line_bot_api.push_message(KAIGO_USER_ID, messages=messages)
+            line_bot_api.push_message("U96671e7042e3f7fc2efee15b6c7f840f", messages=messages)
         elif VehicleDispatchKind == 2:
             wkStr1 = "おまたせ致しました。\nINET交通　株式会社からの配車が確定しました。"
             wkStr2 = "到着地：東京都大田区蒲田5-37-1\n車種：ストレッチャー対応タクシー"
             messages = TextSendMessage(text=wkStr1)
-            line_bot_api.push_message(KAIGO_USER_ID, messages=messages)
+            line_bot_api.push_message("U96671e7042e3f7fc2efee15b6c7f840f", messages=messages)
             messages = TextSendMessage(text=wkStr2)
-            line_bot_api.push_message(KAIGO_USER_ID, messages=messages)
+            line_bot_api.push_message("U96671e7042e3f7fc2efee15b6c7f840f", messages=messages)
         elif VehicleDispatchKind == 3:
             wkStr1 = "おまたせ致しました。\nあいねっと交通株式会社からの配車が確定しました。"
             wkStr2 = "到着地：東京都大田区蒲田5-37-1\n車種：マイクロバス"
             messages = TextSendMessage(text=wkStr1)
-            line_bot_api.push_message(KAIGO_USER_ID, messages=messages)
+            line_bot_api.push_message("U96671e7042e3f7fc2efee15b6c7f840f", messages=messages)
             messages = TextSendMessage(text=wkStr2)
-            line_bot_api.push_message(KAIGO_USER_ID, messages=messages)
+            line_bot_api.push_message("U96671e7042e3f7fc2efee15b6c7f840f", messages=messages)
         
         VehicleDispatchKind=0
         VehicleDispatchFg=0
