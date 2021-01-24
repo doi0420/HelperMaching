@@ -2,7 +2,8 @@ from flask import Flask, request
 import random, json, requests
 import pandas as pd
 import random
-
+import gspread
+import json
 
 # line libray
 from linebot import (
@@ -15,10 +16,16 @@ from linebot.models import (
     MessageEvent, TextMessage, TextSendMessage, StickerSendMessage,ImageSendMessage
 )
 
+#ServiceAccountCredentials：Googleの各サービスへアクセスできるservice変数を生成します。
+from oauth2client.service_account import ServiceAccountCredentials 
+
 import os
 
 VehicleDispatchFg=0
 VehicleDispatchKind=0
+
+#2つのAPIを記述しないとリフレッシュトークンを3600秒毎に発行し続けなければならない
+scope = ['https://spreadsheets.google.com/feeds','https://www.googleapis.com/auth/drive']
 
 def VehicleDispatchFg_now():
     global VehicleDispatchFg
@@ -75,6 +82,23 @@ def callback():
 # メッセージ応答メソッド
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
+    #ダウンロードしたjsonファイル名をクレデンシャル変数に設定（秘密鍵、Pythonファイルから読み込みしやすい位置に置く）
+    path = os.path.dirname(os.path.abspath(__file__)) + "/"
+    credentials = ServiceAccountCredentials.from_json_keyfile_name(path + "helpermaching-9f5798e53f3c.json", scope)
+    #OAuth2の資格情報を使用してGoogle APIにログインします。
+    gc = gspread.authorize(credentials)
+    #共有設定したスプレッドシートキーを変数[SPREADSHEET_KEY]に格納する。
+    SPREADSHEET_KEY = '1mFmBA6wC_YFOy_47nrJboLFfgKnBmUhPL6-XAXOUYNM'
+    #共有設定したスプレッドシートのシート1を開く
+    worksheet = gc.open_by_key(SPREADSHEET_KEY).sheet1
+
+    #A1セルの値を受け取る
+    import_value = int(worksheet.acell('A1').value)
+
+    #A1セルの値に100加算した値をB1セルに表示させる
+    export_value = import_value+100
+    worksheet.update_cell(1,2, export_value)
+
     USER_ID = "U7bb673b5d4a90c19698ef689b421985e"
     global VehicleDispatchFg
     global VehicleDispatchKind
