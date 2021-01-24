@@ -1,11 +1,9 @@
 from flask import Flask, request
 import random, json, requests
 import pandas as pd
-import random
-import gspread
-import json
+import os
 
-# line libray
+ line libray
 from linebot import (
     LineBotApi, WebhookHandler
 )
@@ -16,16 +14,8 @@ from linebot.models import (
     MessageEvent, TextMessage, TextSendMessage, StickerSendMessage,ImageSendMessage
 )
 
-#ServiceAccountCredentials：Googleの各サービスへアクセスできるservice変数を生成します。
-from oauth2client.service_account import ServiceAccountCredentials 
-
-import os
-
 VehicleDispatchFg=0
 VehicleDispatchKind=0
-
-#2つのAPIを記述しないとリフレッシュトークンを3600秒毎に発行し続けなければならない
-scope = ['https://spreadsheets.google.com/feeds','https://www.googleapis.com/auth/drive']
 
 def VehicleDispatchFg_now():
     global VehicleDispatchFg
@@ -50,6 +40,14 @@ def SetElseStr():
         wkStr = "現在はあいねっと交通株式会社へ配車依頼中です。\nもうしばらくお待ち下さい。"
     
     return wkStr
+
+# def connect_gspread(jsonf,key):
+#     scope = ['https://spreadsheets.google.com/feeds','https://www.googleapis.com/auth/drive']
+#     credentials = ServiceAccountCredentials.from_json_keyfile_name(jsonf, scope)
+#     gc = gspread.authorize(credentials)
+#     SPREADSHEET_KEY = key
+#     worksheet = gc.open_by_key(SPREADSHEET_KEY).sheet1
+#     return worksheet
 
 YOUR_CHANNEL_ACCESS_TOKEN = os.environ["YOUR_CHANNEL_ACCESS_TOKEN"]
 YOUR_CHANNEL_SECRET       = os.environ["YOUR_CHANNEL_SECRET"]
@@ -82,31 +80,20 @@ def callback():
 # メッセージ応答メソッド
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-    #ダウンロードしたjsonファイル名をクレデンシャル変数に設定（秘密鍵、Pythonファイルから読み込みしやすい位置に置く）
-    path = os.path.dirname(os.path.abspath(__file__)) + "/"
-    credentials = ServiceAccountCredentials.from_json_keyfile_name(path + "helpermaching-9f5798e53f3c.json", scope)
-    #OAuth2の資格情報を使用してGoogle APIにログインします。
-    gc = gspread.authorize(credentials)
-    #共有設定したスプレッドシートキーを変数[SPREADSHEET_KEY]に格納する。
-    SPREADSHEET_KEY = '1mFmBA6wC_YFOy_47nrJboLFfgKnBmUhPL6-XAXOUYNM'
-    #共有設定したスプレッドシートのシート1を開く
-    worksheet = gc.open_by_key(SPREADSHEET_KEY).sheet1
-
-    #A1セルの値を受け取る
-    import_value = int(worksheet.acell('A1').value)
-
-    #A1セルの値に100加算した値をB1セルに表示させる
-    export_value = import_value+100
-    worksheet.update_cell(1,2, export_value)
-
     USER_ID = "U7bb673b5d4a90c19698ef689b421985e"
     global VehicleDispatchFg
     global VehicleDispatchKind
+    #path = os.path.dirname(os.path.abspath(__file__)) + "/"
+    #jsonf = "helpermaching-9f5798e53f3c.json"
+    # spread_sheet_key = "1mFmBA6wC_YFOy_47nrJboLFfgKnBmUhPL6-XAXOUYNM"
+    # ws = connect_gspread(jsonf,spread_sheet_key)
+
     #　メッセージは "event.message.text" という変数に格納される
     if event.message.text == "配車依頼":
         VehicleDispatchStr1 = "配車を手配致します。"
         VehicleDispatchStr2 = "ご希望の車種を番号でご選択下さい。\n１：車イス対応\n２：ストレッチャー対応\n３：マイクロバス"
         VehicleDispatchFg = 1
+        #ws.update_cell(1,1,event.source.user_id)
         line_bot_api.reply_message(
             event.reply_token,
             [
@@ -166,7 +153,8 @@ def handle_message(event):
             line_bot_api.reply_message(
                 event.reply_token,
                 TextSendMessage(text=SetElseStr())
-            )        
+            )
+
     elif event.message.text == "タクシー会社":
         TaxiListStr1 = "対応可能なタクシー会社です。"
         TaxiListStr2 = "https://www.taxisite.com/station/info/9931003.aspx"
