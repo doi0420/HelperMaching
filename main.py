@@ -140,7 +140,7 @@ def handle_message(event):
         else:
             line_bot_api.reply_message(
                 event.reply_token,
-                TextSendMessage(text=SetElseStr)
+                TextSendMessage(text=SetElseStr())
             )        
     elif event.message.text == "タクシー会社":
         TaxiListStr1 = "対応可能なタクシー会社です。"
