@@ -83,13 +83,24 @@ def handle_message(event):
     if event.source.user_id == KAIGO_USER_ID and event.message.text =="1":
         wkStr1 = ""
         wkStr2 = ""
-        if VehicleDispatchKind == 1:
+        if VehicleDispatchKind == 0:
+            line_bot_api.reply_message(
+                event.reply_token,
+                TextSendMessage(text="現在このボタンは受け付けていません。")
+            )            
+        elif VehicleDispatchKind == 1:
             wkStr1 = "おまたせ致しました。\nアイネット交通株式会社からの配車が確定しました。"
             wkStr2 = "到着地：東京都大田区蒲田5-37-1\n車種：車イス対応タクシー"
             messages = TextSendMessage(text=wkStr1)
             line_bot_api.push_message(USER_ID, messages=messages)
             messages = TextSendMessage(text=wkStr2)
             line_bot_api.push_message(USER_ID, messages=messages)
+            VehicleDispatchKind=0
+            VehicleDispatchFg=0
+            line_bot_api.reply_message(
+                event.reply_token,
+                TextSendMessage(text="対応可能な旨を返信しました。")
+            )
         elif VehicleDispatchKind == 2:
             wkStr1 = "おまたせ致しました。\nINET交通　株式会社からの配車が確定しました。"
             wkStr2 = "到着地：東京都大田区蒲田5-37-1\n車種：ストレッチャー対応タクシー"
@@ -97,6 +108,12 @@ def handle_message(event):
             line_bot_api.push_message(USER_ID, messages=messages)
             messages = TextSendMessage(text=wkStr2)
             line_bot_api.push_message(USER_ID, messages=messages)
+            VehicleDispatchKind=0
+            VehicleDispatchFg=0
+            line_bot_api.reply_message(
+                event.reply_token,
+                TextSendMessage(text="対応可能な旨を返信しました。")
+            )
         elif VehicleDispatchKind == 3:
             wkStr1 = "おまたせ致しました。\nあいねっと交通株式会社からの配車が確定しました。"
             wkStr2 = "到着地：東京都大田区蒲田5-37-1\n車種：マイクロバス"
@@ -104,19 +121,26 @@ def handle_message(event):
             line_bot_api.push_message(USER_ID, messages=messages)
             messages = TextSendMessage(text=wkStr2)
             line_bot_api.push_message(USER_ID, messages=messages)
-
-        VehicleDispatchKind=0
-        VehicleDispatchFg=0
-
-    elif event.source.user_id == KAIGO_USER_ID and event.message.text =="2":
+            VehicleDispatchKind=0
+            VehicleDispatchFg=0
+            line_bot_api.reply_message(
+                event.reply_token,
+                TextSendMessage(text="対応可能な旨を返信しました。")
+            )
+    elif event.source.user_id == KAIGO_USER_ID and event.message.text =="2" and VehicleDispatchKind != 0:
         messages = TextSendMessage(text="申し訳ございません。現在対応可能なタクシーはございません。\nしばらくして再度申し込み下さい。")
         line_bot_api.push_message(USER_ID, messages=messages)
+        VehicleDispatchKind=0
+        VehicleDispatchFg=0  
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text="現在対応ができない旨をお伝えしました。")
         )
-        VehicleDispatchKind=0
-        VehicleDispatchFg=0  
+    elif event.source.user_id == KAIGO_USER_ID and event.message.text =="2" and VehicleDispatchKind == 0:
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text="現在このボタンは受け付けていません。")
+            )          
     elif event.source.user_id != KAIGO_USER_ID and event.message.text == "配車依頼" and VehicleDispatchCheck()==False:
         VehicleDispatchStr1 = "配車を手配致します。"
         VehicleDispatchStr2 = "ご希望の車種を番号でご選択下さい。\n１：車イス対応\n２：ストレッチャー対応\n３：マイクロバス"
