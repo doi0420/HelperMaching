@@ -115,11 +115,8 @@ def handle_message(event):
         replyMessage(event,"現在処理中です。")
         sys.exit()
 
-
-
     #依頼者の場合
-    replyMessage(event, "現在はINET交通　株式会社へ配車依頼中です。\nもうしばらくお待ち下さい。")
-    if dicUsrKbn[event.source.user_id]==1:
+    if event.source.user_id=='U7bb673b5d4a90c19698ef689b421985e':
         pushMessage('U409026962871bf8786172850baa56f62',str(dicStatus[event.source.user_id]))
         #申請状況に応じてメッセージを返す
         #配車依頼中の場合
