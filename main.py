@@ -11,7 +11,7 @@ from linebot.exceptions import (InvalidSignatureError)
 from linebot.models import (MessageEvent, TextMessage, TextSendMessage, StickerSendMessage,ImageSendMessage)
 
 #ユーザ区分[0:タクシー会社、1:依頼者]
-dicUsrKbn={'U7bb673b5d4a90c19698ef689b421985e':1,}
+dicUsrKbn={'U7bb673b5d4a90c19698ef689b421985e':1,'U409026962871bf8786172850baa56f62':0}
 #申請状況を管理
 dicStatus={}
 
@@ -19,8 +19,11 @@ VehicleDispatchFg=0
 VehicleDispatchKind=0
 
 #メッセージを返信します。
-def replyMessage():
-    return 'a'
+def replyMessage(event,msg):
+    line_bot_api.reply_message(
+    event.reply_token,
+    TextSendMessage(text=msg)
+    )
 
 def VehicleDispatchFg_now():
     global VehicleDispatchFg
@@ -78,11 +81,8 @@ def callback():
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     if event.message.text == "ユーザ":
-        line_bot_api.reply_message(
-        event.reply_token,
-        TextSendMessage(text=event.source.user_id)
-        )
-
+        replyMessage(event,event.source.user_id)
+        
     #リクエストのあったユーザの区分を取得
     usrKbn=dicUsrKbn.get(event.source.user_id,-1)
     if usrKbn==-1:
