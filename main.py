@@ -108,7 +108,6 @@ def handle_message(event):
     if usrKbn==-1:
         dicUsrKbn[event.source.user_id]=1
         dicStatus[event.source.user_id]=0
-        usrKbn=1
         pushMessage('U409026962871bf8786172850baa56f62',str(dicStatus[event.source.user_id]))
  
     #現在タクシー会社が処理中ではないことを確認する。
@@ -118,7 +117,7 @@ def handle_message(event):
 
     #依頼者の場合
     pushMessage('U409026962871bf8786172850baa56f62',str(usrKbn))
-    if usrKbn ==1:
+    if dicUsrKbn[event.source.user_id]==1:
         pushMessage('U409026962871bf8786172850baa56f62',str(dicStatus[event.source.user_id]))
         #申請状況に応じてメッセージを返す
         #配車依頼中の場合
@@ -137,7 +136,7 @@ def handle_message(event):
                 pushMessage('U409026962871bf8786172850baa56f62',profile.display_name + "様から配車依頼がありました。\n車イス対応車を希望です。")
                 replyMessage(event, "現在はINET交通　株式会社へ配車依頼中です。\nもうしばらくお待ち下さい。")
     #タクシー会社の場合
-    if usrKbn==0:
+    if dicUsrKbn[event.source.user_id]==0:
         replycnt = 0
         #依頼者に申請中のステータスがある場合、配車を受け付けた旨を返信する。
         if event.message.text == "1":
@@ -154,12 +153,10 @@ def handle_message(event):
                     replycnt = 1
         else:
             replyMessage(event,'このボタンは受け付けていません') 
-            sys.exit()
 
         #一つでも返信があった場合と一つも返信がなかった場合で処理を分ける
         if replycnt == 0:
-            replyMessage(event,'現在返信待ちの依頼はありませんでした')
-            replyMessage(event,str(replycnt) + "\n一つもなかったときの内部")        
+            replyMessage(event,'現在返信待ちの依頼はありませんでした')   
 
 if __name__ == '__main__':
     # This is used when running locally only. When deploying to Google App
