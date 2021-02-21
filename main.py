@@ -140,7 +140,7 @@ def handle_message(event):
 
         #一つでも返信があった場合と一つも返信がなかった場合で処理を分ける
         if replyFG==False:
-
+            replyMessage(event,str(replyFG) + "\n一つもなかったときの内部") 
             replyMessage(event,'現在返信待ちの依頼はありませんでした')           
     #依頼者の場合
     if usrKbn ==1:
