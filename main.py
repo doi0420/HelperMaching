@@ -20,7 +20,7 @@ VehicleDispatchKind=0
 
 #メッセージを返信します。
 def replyMessage():
-
+    return 'a'
 
 def VehicleDispatchFg_now():
     global VehicleDispatchFg
