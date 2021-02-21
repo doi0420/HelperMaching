@@ -117,7 +117,7 @@ def handle_message(event):
         )
         VehicleDispatchKind=0
         VehicleDispatchFg=0  
-    elif event.message.text == "配車依頼" and VehicleDispatchCheck()==False:
+    elif event.source.user_id != KAIGO_USER_ID and event.message.text == "配車依頼" and VehicleDispatchCheck()==False:
         VehicleDispatchStr1 = "配車を手配致します。"
         VehicleDispatchStr2 = "ご希望の車種を番号でご選択下さい。\n１：車イス対応\n２：ストレッチャー対応\n３：マイクロバス"
         VehicleDispatchFg = 1
@@ -128,15 +128,15 @@ def handle_message(event):
                 TextSendMessage(text=VehicleDispatchStr2)
             ]
         )
-    elif VehicleDispatchCheck():
+    elif event.source.user_id != KAIGO_USER_ID and VehicleDispatchCheck():
         profile = line_bot_api.get_profile(event.source.user_id)
 
         if event.message.text == "1":
             VehicleDispatchKind = 1
             messages = TextSendMessage(text=profile.display_name + "様から配車依頼がありました。\n車イス対応車を希望です。")
-            line_bot_api.push_message(USER_ID, messages=messages)
+            line_bot_api.push_message(KAIGO_USER_ID, messages=messages)
             messages = TextSendMessage(text="対応可否を番号でご選択下さい。\n１：対応可能\n２：対応不可")
-            line_bot_api.push_message(USER_ID, messages=messages)
+            line_bot_api.push_message(KAIGO_USER_ID, messages=messages)
 
             text = "アイネット交通株式会社へ依頼中です。\nしばらくお待ち下さい。"
             line_bot_api.reply_message(
@@ -146,9 +146,9 @@ def handle_message(event):
         elif event.message.text == "2":
             VehicleDispatchKind = 2
             messages = TextSendMessage(text=profile.display_name + "様から配車依頼がありました。\nストレッチャー対応車を希望です。")
-            line_bot_api.push_message(USER_ID, messages=messages)
+            line_bot_api.push_message(KAIGO_USER_ID, messages=messages)
             messages = TextSendMessage(text="対応可否を番号でご選択下さい。\n１：対応可能\n２：対応不可")
-            line_bot_api.push_message(USER_ID, messages=messages)            
+            line_bot_api.push_message(KAIGO_USER_ID, messages=messages)            
             text = "INET交通　株式会社へ依頼中です。\nしばらくお待ち下さい。"
             line_bot_api.reply_message(
                 event.reply_token,
@@ -183,6 +183,11 @@ def handle_message(event):
             event.reply_token,
             TextSendMessage(text=event.source.user_id)
             )
+    elif event.source.user_id == KAIGO_USER_ID:
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text="このボタンは利用できません。")
+            )        
     else:
         line_bot_api.reply_message(
             event.reply_token,
