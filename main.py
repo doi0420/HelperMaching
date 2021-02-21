@@ -116,6 +116,26 @@ def handle_message(event):
         replyMessage(event,"現在処理中です。")
         sys.exit()
 
+    #依頼者の場合
+    pushMessage('U409026962871bf8786172850baa56f62',str(usrKbn))
+    if usrKbn ==1:
+        pushMessage('U409026962871bf8786172850baa56f62',str(dicStatus[event.source.user_id]))
+        #申請状況に応じてメッセージを返す
+        #配車依頼中の場合
+        if dicStatus[event.source.user_id] ==0:
+            pushMessage('U409026962871bf8786172850baa56f62',"依頼者最初")
+            if event.message.text == "配車依頼":
+                dicStatus[event.source.user_id] =1
+                replyMessage(event,"現在は配車のオプション選択待ちです。\n１：車イス対応\n２：ストレッチャー対応\n３：マイクロバス\nからオプションをコメントして下さい。")
+            else:
+                del dicStatus[event.source.user_id]
+        #オプション選択中の場合
+        elif dicStatus[event.source.user_id] ==1:
+            profile = line_bot_api.get_profile(event.source.user_id)
+            if event.message.text == "1":
+                dicStatus[event.source.user_id] =2
+                pushMessage('U409026962871bf8786172850baa56f62',profile.display_name + "様から配車依頼がありました。\n車イス対応車を希望です。")
+                replyMessage(event, "現在はINET交通　株式会社へ配車依頼中です。\nもうしばらくお待ち下さい。")
     #タクシー会社の場合
     if usrKbn==0:
         replycnt = 0
@@ -140,30 +160,6 @@ def handle_message(event):
         if replycnt == 0:
             replyMessage(event,'現在返信待ちの依頼はありませんでした')
             replyMessage(event,str(replycnt) + "\n一つもなかったときの内部")        
-    #依頼者の場合
-    pushMessage('U409026962871bf8786172850baa56f62',str(usrKbn))
-    if usrKbn ==1:
-        pushMessage('U409026962871bf8786172850baa56f62',str(dicStatus[event.source.user_id]))
-        #申請状況に応じてメッセージを返す
-        #配車依頼中の場合
-        if dicStatus[event.source.user_id] ==0:
-            pushMessage('U409026962871bf8786172850baa56f62',"依頼者最初")
-            if event.message.text == "配車依頼":
-                dicStatus[event.source.user_id] =1
-                replyMessage(event,"現在は配車のオプション選択待ちです。\n１：車イス対応\n２：ストレッチャー対応\n３：マイクロバス\nからオプションをコメントして下さい。")
-            else:
-                del dicStatus[key]
-        #オプション選択中の場合
-        elif dicStatus[event.source.user_id] ==1:
-            profile = line_bot_api.get_profile(event.source.user_id)
-            if event.message.text == "1":
-                dicStatus[event.source.user_id] =2
-                pushMessage('U409026962871bf8786172850baa56f62',profile.display_name + "様から配車依頼がありました。\n車イス対応車を希望です。")
-                replyMessage(event, "現在はINET交通　株式会社へ配車依頼中です。\nもうしばらくお待ち下さい。")
-                          
-
-
-
 
 if __name__ == '__main__':
     # This is used when running locally only. When deploying to Google App
