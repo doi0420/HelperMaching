@@ -107,7 +107,7 @@ def handle_message(event):
     #リクエストのあったユーザの区分を取得
     usrKbn=dicUsrKbn.get(event.source.user_id,-1)
     #ディクショナリーになかったときは、依頼者として追加する
-    pushMessage('U409026962871bf8786172850baa56f62',"次")
+    pushMessage('U409026962871bf8786172850baa56f62',str(usrKbn))
     if usrKbn==-1:
         dicUsrKbn[event.source.user_id]=1
         usrKbn=1
