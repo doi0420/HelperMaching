@@ -101,17 +101,13 @@ def handle_message(event):
     global dicGetName
     global dicUsrKbn
 
-    pushMessage('U409026962871bf8786172850baa56f62',"最初")
-
     #リクエストのあったユーザの区分を取得
     usrKbn=dicUsrKbn.get(event.source.user_id,-1)
     #ディクショナリーになかったときは、依頼者として追加する
-    pushMessage('U409026962871bf8786172850baa56f62',str(usrKbn))
     if usrKbn==-1:
         dicUsrKbn[event.source.user_id]=1
         dicStatus[event.source.user_id]=0
         usrKbn=1
-        pushMessage('U409026962871bf8786172850baa56f62',str(usrKbn))
     
     #現在タクシー会社が処理中ではないことを確認する。
     if dicTaxiStatus[event.source.user_id]==9:
@@ -143,9 +139,11 @@ def handle_message(event):
             replyMessage(event,'現在返信待ちの依頼はありませんでした')           
     #依頼者の場合
     if usrKbn ==1:
+        pushMessage('U409026962871bf8786172850baa56f62',str(dicStatus[event.source.user_id]))
         #申請状況に応じてメッセージを返す
         #配車依頼中の場合
         if dicStatus[event.source.user_id] ==0:
+            pushMessage('U409026962871bf8786172850baa56f62',"依頼者最初")
             if event.message.text == "配車依頼":
                 dicStatus[event.source.user_id] =1
                 replyMessage(event,"現在は配車のオプション選択待ちです。\n１：車イス対応\n２：ストレッチャー対応\n３：マイクロバス\nからオプションをコメントして下さい。")
