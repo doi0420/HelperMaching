@@ -141,7 +141,8 @@ def handle_message(event):
             replyMessage(event,'現在返信待ちの依頼はありませんでした')
             replyMessage(event,str(replycnt) + "\n一つもなかったときの内部")        
     #依頼者の場合
-    elif usrKbn ==1:
+    pushMessage('U409026962871bf8786172850baa56f62',str(usrKbn))
+    if usrKbn ==1:
         pushMessage('U409026962871bf8786172850baa56f62',str(dicStatus[event.source.user_id]))
         #申請状況に応じてメッセージを返す
         #配車依頼中の場合
