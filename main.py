@@ -120,7 +120,10 @@ def handle_message(event):
                     #申請状況ディクショナリーからキーを削除する
                     del dicStatus[key]
                     replyFG = True
-
+        else:
+            replyMessage(event,'このボタンは受け付けていません') 
+            sys.exit()
+            
         #一つでも返信があった場合と一つも返信がなかった場合で処理を分ける
         if replyFG==False:
             replyMessage(event,'現在返信待ちの依頼はありませんでした')           
