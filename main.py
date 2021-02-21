@@ -109,7 +109,8 @@ def handle_message(event):
         dicUsrKbn[event.source.user_id]=1
         dicStatus[event.source.user_id]=0
         usrKbn=1
-    
+        pushMessage('U409026962871bf8786172850baa56f62',str(dicStatus[event.source.user_id]))
+ 
     #現在タクシー会社が処理中ではないことを確認する。
     if dicTaxiStatus[event.source.user_id]==9:
         replyMessage(event,"現在処理中です。")
