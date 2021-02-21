@@ -116,7 +116,8 @@ def handle_message(event):
         sys.exit()
 
     #依頼者の場合
-    if event.message.text == "配車依頼":
+    pushMessage('U409026962871bf8786172850baa56f62',event.message.text)   
+    if event.message.text == '配車依頼':
         pushMessage('U409026962871bf8786172850baa56f62',str(dicStatus[event.source.user_id]))
         #申請状況に応じてメッセージを返す
         #配車依頼中の場合
