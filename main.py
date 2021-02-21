@@ -12,8 +12,7 @@ from linebot.exceptions import (InvalidSignatureError)
 from linebot.models import (MessageEvent, TextMessage, TextSendMessage, StickerSendMessage,ImageSendMessage)
 
 #ユーザ区分[0:タクシー会社、1:依頼者]
-dicUsrKbn={'U7bb673b5d4a90c19698ef689b421985e':1,
-           'U409026962871bf8786172850baa56f62':0}
+dicUsrKbn={'U409026962871bf8786172850baa56f62':0}
 #申請状況を管理[0:配車依頼中、1:オプション選択中、2:車イス対応返信待ち、
 #　　　　　　　 3:ストレッチャー対応返信待ち、4:マイクロバス返信街、9:現在処理中]
 dicStatus={}
