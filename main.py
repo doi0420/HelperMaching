@@ -120,6 +120,7 @@ def handle_message(event):
         #依頼者に申請中のステータスがある場合、配車を受け付けた旨を返信する。
         if event.message.text == "1":
             for key in dicStatus:
+                replyMessage(event,key + ":" +str(replyFG) + "\n") 
                 replyFG = replyTaxiMessage(key,event,replyFG)
         #依頼者に申請中のステータスがある場合、配車を受け付けられなかった旨を返信する。
         elif event.message.text == "2":
