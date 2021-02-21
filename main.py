@@ -121,9 +121,7 @@ def handle_message(event):
         #依頼者に申請中のステータスがある場合、配車を受け付けた旨を返信する。
         if event.message.text == "1":
             for key in dicStatus:
-                replyMessage(event,key + ":" +str(replycnt) + "\n") 
                 replycnt += replyTaxiMessage(key,event)
-                replyMessage(event,key + ":" +str(replycnt) + "\n") 
         #依頼者に申請中のステータスがある場合、配車を受け付けられなかった旨を返信する。
         elif event.message.text == "2":
             for key in dicStatus:
@@ -137,12 +135,10 @@ def handle_message(event):
             replyMessage(event,'このボタンは受け付けていません') 
             sys.exit()
 
-        replyMessage(event,str(replycnt) + "\n") 
-
         #一つでも返信があった場合と一つも返信がなかった場合で処理を分ける
         if replycnt == 0:
-            replyMessage(event,str(replycnt) + "\n一つもなかったときの内部") 
-            replyMessage(event,'現在返信待ちの依頼はありませんでした')           
+            replyMessage(event,'現在返信待ちの依頼はありませんでした')
+            replyMessage(event,str(replycnt) + "\n一つもなかったときの内部")        
     #依頼者の場合
     elif usrKbn ==1:
         pushMessage('U409026962871bf8786172850baa56f62',str(dicStatus[event.source.user_id]))
