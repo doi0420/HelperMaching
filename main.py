@@ -36,31 +36,32 @@ def pushMessage(userId,msg):
     line_bot_api.push_message(userId, messages=messages)
 
 #タクシー会社の受つけ状況を返信します
-def replyTaxiMessage(key,event,repFg):
+def replyTaxiMessage(key,event):
     global dicGetName
     global dicStatus
+    retcnt = 0
     if dicStatus[key]==2:
         #依頼者へ受け付けた旨を返信する
         pushMessage(key,"おまたせ致しました。\nアイネット交通株式会社からの配車が確定しました。")
         pushMessage(key,"到着地：東京都大田区蒲田5-37-1\n車種：車イス対応タクシー")
         #タクシー会社へマッチングした旨を返信する
         replyMessage(event,dicGetName[key] + '様の配車依頼を受付ました。')
-        repFG = True
+        retcnt = 1
     elif dicStatus[key]==3:
         #依頼者へ受け付けた旨を返信する
         pushMessage(key,"おまたせ致しました。\nINET交通　株式会社からの配車が確定しました。")
         pushMessage(key,"到着地：東京都大田区蒲田5-37-1\n車種：ストレッチャー対応タクシー")
         #タクシー会社へマッチングした旨を返信する
         replyMessage(event,dicGetName[key] + '様の配車依頼を受付ました。')
-        repFG = True
+        retcnt = 1
     elif dicStatus[key]==4:
         #依頼者へ受け付けた旨を返信する
         pushMessage(key,"おまたせ致しました。\nあいねっと交通株式会社からの配車が確定しました。")
         pushMessage(key,"到着地：東京都大田区蒲田5-37-1\n車種：マイクロバス")
         #タクシー会社へマッチングした旨を返信する
         replyMessage(event,dicGetName[key] + '様の配車依頼を受付ました。')
-        repFG = True
-    return repFG
+        retcnt = 1
+    return retcnt
 
 YOUR_CHANNEL_ACCESS_TOKEN = os.environ["YOUR_CHANNEL_ACCESS_TOKEN"]
 YOUR_CHANNEL_SECRET       = os.environ["YOUR_CHANNEL_SECRET"]
@@ -116,13 +117,13 @@ def handle_message(event):
 
     #タクシー会社の場合
     if usrKbn==0:
-        replyFG = False
+        replycnt = 0
         #依頼者に申請中のステータスがある場合、配車を受け付けた旨を返信する。
         if event.message.text == "1":
             for key in dicStatus:
-                replyMessage(event,key + ":" +str(replyFG) + "\n") 
-                replyFG = replyTaxiMessage(key,event,replyFG)
-                replyMessage(event,key + ":" +str(replyFG) + "\n") 
+                replyMessage(event,key + ":" +str(replycnt) + "\n") 
+                replycnt += replyTaxiMessage(key,event)
+                replyMessage(event,key + ":" +str(replycnt) + "\n") 
         #依頼者に申請中のステータスがある場合、配車を受け付けられなかった旨を返信する。
         elif event.message.text == "2":
             for key in dicStatus:
@@ -131,19 +132,19 @@ def handle_message(event):
                     pushMessage(key,"申し訳ございません。現在対応可能なタクシー会社はございません。")
                     #申請状況ディクショナリーからキーを削除する
                     del dicStatus[key]
-                    replyFG = True
+                    replycnt = 1
         else:
             replyMessage(event,'このボタンは受け付けていません') 
             sys.exit()
 
-        replyMessage(event,str(replyFG) + "\n") 
+        replyMessage(event,str(replycnt) + "\n") 
 
         #一つでも返信があった場合と一つも返信がなかった場合で処理を分ける
-        if replyFG == False:
-            replyMessage(event,str(replyFG) + "\n一つもなかったときの内部") 
+        if replycnt == 0:
+            replyMessage(event,str(replycnt) + "\n一つもなかったときの内部") 
             replyMessage(event,'現在返信待ちの依頼はありませんでした')           
     #依頼者の場合
-    if usrKbn ==1:
+    elif usrKbn ==1:
         pushMessage('U409026962871bf8786172850baa56f62',str(dicStatus[event.source.user_id]))
         #申請状況に応じてメッセージを返す
         #配車依頼中の場合
