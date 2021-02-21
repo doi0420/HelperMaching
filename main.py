@@ -109,6 +109,7 @@ def handle_message(event):
     pushMessage('U409026962871bf8786172850baa56f62',str(usrKbn))
     if usrKbn==-1:
         dicUsrKbn[event.source.user_id]=1
+        dicStatus[event.source.user_id]=0
         usrKbn=1
         pushMessage('U409026962871bf8786172850baa56f62',str(usrKbn))
     
